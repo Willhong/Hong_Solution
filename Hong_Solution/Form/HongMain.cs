@@ -15,49 +15,42 @@ namespace Hong_Solution
 {
     public partial class HongMain : Form
     {
-        Tools.HongTools ToolsHong = new Tools.HongTools();
-        ParamConfig a = new ParamConfig();
+        TestForm testForm=null;
         
         public HongMain()
         {
             InitializeComponent();
-            a.NameValue= new NameValue();
-            a.Age=new Age();
-            a.Arraytest=new Arraytest();
+            this.Size = new System.Drawing.Size(1920, 1080);
 
-            a.Arraytest.arraytest= new string[10];
-            for(int i = 0; i < 10; i++)
+            Initialize();
+        }
+        public void Initialize()
+        {
+            testForm = new TestForm(this);
+            testForm.TopLevel = false;
+            AddFormToPanel(testForm);
+
+        }
+
+        public void AddFormToPanel(Control control)
+        {
+            pnlForm.Controls.Add(control);
+        }
+        private void btnTestForm_Click(object sender, EventArgs e)
+        {
+            for(int i = 0; i < pnlForm.Controls.Count; i++)
             {
-                a.Arraytest.arraytest[i]=i.ToString();
+                pnlForm.Controls[i].Visible = false;
             }
+            pnlForm.Controls["testForm"].Visible = true;
         }
 
-        public void LoadJson()
+        private void btnTmpForm_Click(object sender, EventArgs e)
         {
-            string Path = HongDef.CONFIG_FOLDER + "\\Config.json";
-            a.NameValue = ToolsHong.LoadJson<NameValue>(Path, "NameValue");
-            a.Age = ToolsHong.LoadJson<Age>(Path, "Age");
-            a.Arraytest = ToolsHong.LoadJson<Arraytest>(Path, "Arraytest");
-        }
-        public void SaveJson()
-        {
-            a.NameValue.Name = tbName.Text;
-            a.NameValue.Value = tbValue.Text;
-            a.Age.ageisnaee = tbAge.Text;
-            ToolsHong.SaveJson(a);
-        }
-
-        private void btnLoad_Click(object sender, EventArgs e)
-        {
-            LoadJson();
-            tbAge.Text = a.Age.ageisnaee.ToString();
-            tbName.Text =   a.NameValue.Name.ToString();
-            tbValue.Text = a.NameValue.Value.ToString();
-        }
-
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            SaveJson();
+            for (int i = 0; i < pnlForm.Controls.Count; i++)
+            {
+                pnlForm.Controls[i].Visible = false;
+            } 
         }
     }
 }

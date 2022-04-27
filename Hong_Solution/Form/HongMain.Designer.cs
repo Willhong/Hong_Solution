@@ -28,114 +28,58 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tbName = new System.Windows.Forms.TextBox();
-            this.tbValue = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.btnLoad = new System.Windows.Forms.Button();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.tbAge = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.pnlForm = new System.Windows.Forms.Panel();
+            this.btnTestForm = new System.Windows.Forms.Button();
+            this.btnTmpForm = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // tbName
+            // pnlForm
             // 
-            this.tbName.Location = new System.Drawing.Point(127, 12);
-            this.tbName.Name = "tbName";
-            this.tbName.Size = new System.Drawing.Size(100, 21);
-            this.tbName.TabIndex = 0;
+            this.pnlForm.Location = new System.Drawing.Point(0, 0);
+            this.pnlForm.Name = "pnlForm";
+            this.pnlForm.Size = new System.Drawing.Size(501, 438);
+            this.pnlForm.TabIndex = 0;
             // 
-            // tbValue
+            // btnTestForm
             // 
-            this.tbValue.Location = new System.Drawing.Point(127, 39);
-            this.tbValue.Name = "tbValue";
-            this.tbValue.Size = new System.Drawing.Size(100, 21);
-            this.tbValue.TabIndex = 1;
+            this.btnTestForm.Location = new System.Drawing.Point(507, 12);
+            this.btnTestForm.Name = "btnTestForm";
+            this.btnTestForm.Size = new System.Drawing.Size(281, 81);
+            this.btnTestForm.TabIndex = 1;
+            this.btnTestForm.Text = "TestForm";
+            this.btnTestForm.UseVisualStyleBackColor = true;
+            this.btnTestForm.Click += new System.EventHandler(this.btnTestForm_Click);
             // 
-            // label1
+            // btnTmpForm
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(83, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 12);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Name";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(83, 42);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(37, 12);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Value";
-            // 
-            // btnLoad
-            // 
-            this.btnLoad.Location = new System.Drawing.Point(85, 128);
-            this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(75, 23);
-            this.btnLoad.TabIndex = 3;
-            this.btnLoad.Text = "Load";
-            this.btnLoad.UseVisualStyleBackColor = true;
-            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
-            // 
-            // btnSave
-            // 
-            this.btnSave.Location = new System.Drawing.Point(166, 128);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 4;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // tbAge
-            // 
-            this.tbAge.Location = new System.Drawing.Point(127, 66);
-            this.tbAge.Name = "tbAge";
-            this.tbAge.Size = new System.Drawing.Size(100, 21);
-            this.tbAge.TabIndex = 1;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(83, 69);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(27, 12);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Age";
+            this.btnTmpForm.Location = new System.Drawing.Point(507, 99);
+            this.btnTmpForm.Name = "btnTmpForm";
+            this.btnTmpForm.Size = new System.Drawing.Size(281, 81);
+            this.btnTmpForm.TabIndex = 1;
+            this.btnTmpForm.Text = "TMP";
+            this.btnTmpForm.UseVisualStyleBackColor = true;
+            this.btnTmpForm.Click += new System.EventHandler(this.btnTmpForm_Click);
             // 
             // HongMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.btnLoad);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.tbAge);
-            this.Controls.Add(this.tbValue);
-            this.Controls.Add(this.tbName);
+            this.Controls.Add(this.btnTmpForm);
+            this.Controls.Add(this.btnTestForm);
+            this.Controls.Add(this.pnlForm);
             this.Name = "HongMain";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TextBox tbName;
-        private System.Windows.Forms.TextBox tbValue;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btnLoad;
-        private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.TextBox tbAge;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Panel pnlForm;
+        private System.Windows.Forms.Button btnTestForm;
+        private System.Windows.Forms.Button btnTmpForm;
     }
 }
 
