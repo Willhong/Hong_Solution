@@ -55,6 +55,9 @@
       <HintPath>..\..\..\..\..\..\Program Files\Zebra Technologies\Barcode Scanners\Scanner SDK\Scanner SDK\Sample Applications\bin\Interop.CoreScanner.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="OpenCvSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenCvSharp4.4.5.5.20211231\lib\net48\OpenCvSharp.dll</HintPath>
     </Reference>
@@ -104,23 +107,28 @@
   <ItemGroup>
     <Compile Include="Barcode\ZebraBarcode.cs" />
     <Compile Include="Camera\CogCam.cs" />
+    <Compile Include="Config\ParamConfig.cs" />
     <Compile Include="Define\BCRDef.cs" />
     <Compile Include="Define\HongDef.cs" />
-    <Compile Include="HongMain.cs">
+    <Compile Include="Form\HongMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HongMain.Designer.cs">
+    <Compile Include="Form\HongMain.Designer.cs">
       <DependentUpon>HongMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestForm.cs">
+    <Compile Include="Form\TestForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TestForm.Designer.cs">
+    <Compile Include="Form\TestForm.Designer.cs">
       <DependentUpon>TestForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\HongTools.cs" />
     <Compile Include="Tools\VersionInfo.cs" />
+    <EmbeddedResource Include="Form\HongMain.resx">
+      <DependentUpon>HongMain.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

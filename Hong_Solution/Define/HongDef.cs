@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hong_Solution.Define
+namespace Hong_Solution
 {
-    internal class HongDef
+    public class HongDef
     {
+        public const string CONFIG_FOLDER = "D:\\Hong_Solution";
     }
 }
