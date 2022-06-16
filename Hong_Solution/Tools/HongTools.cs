@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -55,6 +57,18 @@ namespace Hong_Solution.Tools
         }
         #endregion
 
+        #region openFileDialog
+        public string OpenFile(string FileType)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "*."+ FileType.ToUpper() + "|*."+ FileType.ToLower();
+            ofd.Title = "Open "+FileType;
+            ofd.ShowDialog();
+            return ofd.FileName;
+        }
+
+        #endregion
+
         #region Json
         public void SaveJson(object classname)
         {
@@ -84,7 +98,20 @@ namespace Hong_Solution.Tools
             //JObject tmp = (JObject)body[section];
             //return JsonConvert.DeserializeObject<T>(tmp.ToString());
 
+        }
+        #endregion
 
+        #region ImageLoad
+        public void LoadPictureboxImage(PictureBox pb,string dir)
+        {
+            if (pb.Image != null)
+            {
+                pb.Image.Dispose();
+            }
+            using (FileStream fileStream = new FileStream(dir, FileMode.Open))
+            {
+                pb.Image = new Bitmap(fileStream);
+            }
         }
         #endregion
     }

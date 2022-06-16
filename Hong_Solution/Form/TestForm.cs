@@ -12,9 +12,9 @@ namespace Hong_Solution
 {
     public partial class TestForm : Form
     {
-        HongMain MainHong=null;
-        Tools.HongTools ToolsHong = new Tools.HongTools();
-        ParamConfig a = new ParamConfig();
+        public HongMain MainHong=null;
+        public Tools.HongTools ToolsHong = new Tools.HongTools();
+        public ParamConfig a = new ParamConfig();
         public TestForm(HongMain Main)
         {
             InitializeComponent();
@@ -23,7 +23,7 @@ namespace Hong_Solution
             a.NameValue = new NameValue();
             a.Age = new Age();
             a.Arraytest = new Arraytest();
-
+            a.Image= new ImageParam();
             a.Arraytest.arraytest = new string[10];
             for (int i = 0; i < 10; i++)
             {

@@ -1,15 +1,21 @@
 ﻿using Cognex.VisionPro;
-using Cognex.VisionPro.ImageProcessing;
+using Cognex.VisionPro.ImageFile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cognex.VisionPro.Exceptions;
+using System.Windows.Forms;
+using System.IO;
+using Cognex.VisionPro.ImageProcessing;
 
-namespace Hong_Solution.Camera
+namespace Hong_Solution
 {
-    internal class CogCam
+    public class VisionProCam
     {
+        public HongMain FormMain = null;                                                                                                                                                                                             
+
         public bool bIsOpen = false;
         public bool bIsGrabFinish = false;
         public bool bLiveOn = false;
@@ -32,8 +38,9 @@ namespace Hong_Solution.Camera
 
         CogIPOneImageTool cogIPOneImageTool;
 
-        public CogCam(ICogFrameGrabber cogFrameGrabber, int nCamNum)
+        public VisionProCam(ICogFrameGrabber cogFrameGrabber, int nCamNum)
         {
+            
             this.cogFrameGrabber = cogFrameGrabber;
 
             try
@@ -52,10 +59,11 @@ namespace Hong_Solution.Camera
 
                 cogAcqFifoTool.Operator.Flush();
 
-
+                SetIPOneImageTool();
             }
             catch (Exception e)
-            { 
+            {
+                //FormMain.DebugPrint(e.StackTrace);
 
                 bIsOpen = false;
             }
@@ -68,38 +76,56 @@ namespace Hong_Solution.Camera
                 int trigNum;
 
                 bIsGrabFinish = false;
-
+                
                 try
                 {
                     cogAcqFifo.AcquiredPixelFormat();
                     cogImage8Grey = cogAcqFifo.Acquire(out trigNum) as CogImage8Grey;
-                    //cogImage8Grey = SetFlipRotate();//new CogImage8Grey(SetFlipRotate());
+                    cogImage8Grey = SetFlipRotate();//new CogImage8Grey(SetFlipRotate());
                     cogImage8Grey.SelectedSpaceName = "#";
 
                     cogAcqFifoTool.Operator.Flush();
 
+                    //if (!FormMain.g_bflgAlignInspectionStart && FormMain.g_bManualGrab)
+                    //{
+                        //string sFolderPath = $"{VisionDef.IMAGE_FOLDER}\\{DateTime.Now.Year}\\{DateTime.Now.Month.ToString("d2")}\\{DateTime.Now.Day.ToString("d2")}\\Grab";
+                        //if (!Directory.Exists(sFolderPath)) Directory.CreateDirectory(sFolderPath); // 폴더 경로 생성
+                        //string sFilePath = $"{sFolderPath}\\{DateTime.Now.Hour.ToString("d2")}{DateTime.Now.Minute.ToString("d2")}{DateTime.Now.Second.ToString("d2")}_Cam{nCamNum+1}.bmp";
+
+
+                        //if (!FormMain.g_bLiveOn)
+                            //FormMain.SaveImageBMP(cogImage8Grey, sFilePath);
+                   // }
+
+                    //FormMain.alignGreyImage[nCamNum] = cogImage8Grey;
                 }
                 catch (Exception e)
                 {
-                    bIsOpen = false;
+                    //FormMain.DebugPrint(e.StackTrace);
+                    //FormMain.g_bCamOpen[nCamNum] = false;
                 }
 
                 bIsGrabFinish = true;
 
                 return cogImage8Grey;
             }
-
         }
-        private CogImage8Grey SetFlipRotate(CogImage8Grey InputImage,CogIPOneImageFlipRotateOperationConstants option)
+
+        
+        private void SetIPOneImageTool()
         {
             cogIPOneImageTool = new CogIPOneImageTool();
             CogIPOneImageFlipRotate cogIPOneImageFlipRotate = new CogIPOneImageFlipRotate();
-            cogIPOneImageFlipRotate.OperationInPixelSpace = option;
+            cogIPOneImageFlipRotate.OperationInPixelSpace = CogIPOneImageFlipRotateOperationConstants.Rotate180Deg;
             cogIPOneImageTool.Operators.Add(cogIPOneImageFlipRotate);
-            cogIPOneImageTool.InputImage = InputImage;
-            cogIPOneImageTool.Run();
-            return cogIPOneImageTool.OutputImage as CogImage8Grey;
+        }
 
+        private CogImage8Grey SetFlipRotate()
+        {
+            cogIPOneImageTool.InputImage = cogImage8Grey;
+            cogIPOneImageTool.Run();
+
+            return cogIPOneImageTool.OutputImage as CogImage8Grey;
         }
     }
 }

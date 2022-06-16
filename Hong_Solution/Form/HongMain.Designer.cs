@@ -31,6 +31,8 @@
             this.pnlForm = new System.Windows.Forms.Panel();
             this.btnTestForm = new System.Windows.Forms.Button();
             this.btnTmpForm = new System.Windows.Forms.Button();
+            this.btnUIForm = new System.Windows.Forms.Button();
+            this.btnImageLoad = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // pnlForm
@@ -56,15 +58,37 @@
             this.btnTmpForm.Name = "btnTmpForm";
             this.btnTmpForm.Size = new System.Drawing.Size(281, 81);
             this.btnTmpForm.TabIndex = 1;
-            this.btnTmpForm.Text = "TMP";
+            this.btnTmpForm.Text = "VisionPro";
             this.btnTmpForm.UseVisualStyleBackColor = true;
             this.btnTmpForm.Click += new System.EventHandler(this.btnTmpForm_Click);
+            // 
+            // btnUIForm
+            // 
+            this.btnUIForm.Location = new System.Drawing.Point(507, 186);
+            this.btnUIForm.Name = "btnUIForm";
+            this.btnUIForm.Size = new System.Drawing.Size(281, 81);
+            this.btnUIForm.TabIndex = 1;
+            this.btnUIForm.Text = "UI";
+            this.btnUIForm.UseVisualStyleBackColor = true;
+            this.btnUIForm.Click += new System.EventHandler(this.btnUIForm_Click);
+            // 
+            // btnImageLoad
+            // 
+            this.btnImageLoad.Location = new System.Drawing.Point(507, 357);
+            this.btnImageLoad.Name = "btnImageLoad";
+            this.btnImageLoad.Size = new System.Drawing.Size(281, 81);
+            this.btnImageLoad.TabIndex = 1;
+            this.btnImageLoad.Text = "Image Load";
+            this.btnImageLoad.UseVisualStyleBackColor = true;
+            this.btnImageLoad.Click += new System.EventHandler(this.btnImageLoad_Click);
             // 
             // HongMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnImageLoad);
+            this.Controls.Add(this.btnUIForm);
             this.Controls.Add(this.btnTmpForm);
             this.Controls.Add(this.btnTestForm);
             this.Controls.Add(this.pnlForm);
@@ -80,6 +104,8 @@
         private System.Windows.Forms.Panel pnlForm;
         private System.Windows.Forms.Button btnTestForm;
         private System.Windows.Forms.Button btnTmpForm;
+        private System.Windows.Forms.Button btnUIForm;
+        private System.Windows.Forms.Button btnImageLoad;
     }
 }
 

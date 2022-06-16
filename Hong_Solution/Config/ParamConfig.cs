@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,9 +16,16 @@ namespace Hong_Solution
         public Age Age { get; set; }
 
         public Arraytest Arraytest { get; set; }
+
+        public ImageParam Image { get; set; }
         
     }
+    public class ImageParam
+    {
+        public string ImagePath { get; set; }
+        public Bitmap Image { get; set; }
 
+    }
     public class NameValue
     {
         public string Name { get; set; }
