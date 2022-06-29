@@ -452,7 +452,7 @@
     <Compile Include="Camera\VisionProCam.cs" />
     <Compile Include="Communication\DB\MSSql.cs" />
     <Compile Include="Communication\Socket\AsyncObject.cs" />
-    <Compile Include="Communication\Socket\Socket.cs" />
+    <Compile Include="Communication\Socket\SocketConnect.cs" />
     <Compile Include="Config\ParamConfig.cs" />
     <Compile Include="Define\BCRDef.cs" />
     <Compile Include="Define\HongDef.cs" />
