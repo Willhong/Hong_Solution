@@ -114,5 +114,25 @@ namespace Hong_Solution.Tools
             }
         }
         #endregion
+
+
+        #region Misc
+        //public void EventHandler()
+        //{
+        //    foreach (Control a in this.Controls)
+        //    {
+        //        if (a.GetType().ToString().Contains("TextBox"))
+        //        {
+        //            a.Click += ClickOpenKeyboard;
+        //            
+        //        }
+        //    }
+        //}
+        //public void ClickOpenKeyboard(object sender, EventArgs e)
+        //{
+        //    TextBox tb = (TextBox)sender;
+        //    tb.Text = "1";
+        //}
+        #endregion
     }
 }
