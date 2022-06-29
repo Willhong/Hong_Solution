@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hong_Solution.Communication
+namespace Hong_Solution
 {
     public class SocketConnect
     {
