@@ -13,7 +13,7 @@ namespace Hong_Solution
     public partial class TestForm : Form
     {
         public HongMain MainHong=null;
-        public Tools.HongTools ToolsHong = new Tools.HongTools();
+        public HongTools ToolsHong = new HongTools();
         public ParamConfig a = new ParamConfig();
         public TestForm(HongMain Main)
         {

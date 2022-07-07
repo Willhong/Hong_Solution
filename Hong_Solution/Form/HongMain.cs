@@ -18,11 +18,12 @@ namespace Hong_Solution
         public TestForm FormTest=null;
         public VisionProForm FormVisionPro=null;
         public UIForm FormUI = null;
+        public OpenCVForm FormOpenCV = null;
         public Byte[] ImageArray;
         public HongMain()
         {
-            InitializeComponent();
             this.Size = new System.Drawing.Size(1920, 1080);
+            InitializeComponent();
 
             Initialize();
         }
@@ -34,11 +35,14 @@ namespace Hong_Solution
             FormVisionPro.TopLevel = false;
             FormUI = new UIForm(this);
             FormUI.TopLevel = false;
+            FormOpenCV = new OpenCVForm(this);
+            FormOpenCV.TopLevel = false;
 
             pnlForm.Size=FormVisionPro.Size;
             AddFormToPanel(FormTest);
             AddFormToPanel(FormVisionPro);
             AddFormToPanel(FormUI);
+            AddFormToPanel(FormOpenCV);
 
             ResizePanel();
             MoveButtons();
@@ -55,50 +59,28 @@ namespace Hong_Solution
         }
         public void ResizePanel()
         {
-            double pnlWidth=0;
-            double pnlHeight=0;
+            int pnlWidth=0;
+            int pnlHeight=0;
             foreach (Control a in pnlForm.Controls)
             {
                 pnlWidth = a.Size.Width > pnlWidth ? a.Size.Width : pnlWidth;
                 pnlHeight = a.Size.Height > pnlHeight ? a.Size.Height : pnlHeight;
             }
+            pnlForm.Width = pnlWidth;
+            pnlForm.Height = pnlHeight;
         }
         public void AddFormToPanel(Control control)
         {
             pnlForm.Controls.Add(control);
         }
-        private void btnTestForm_Click(object sender, EventArgs e)
-        {
-            for(int i = 0; i < pnlForm.Controls.Count; i++)
-            {
-                pnlForm.Controls[i].Visible = false;
-            }
-            pnlForm.Controls["TestForm"].Visible = true;
-        }
 
-        private void btnTmpForm_Click(object sender, EventArgs e)
-        {
-            for (int i = 0; i < pnlForm.Controls.Count; i++)
-            {
-                pnlForm.Controls[i].Visible = false;
-            }
-            pnlForm.Controls["VisionProForm"].Visible = true;
-
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
             FormTest.ToolsHong.ShowDialog("", "");
         }
 
-        private void btnUIForm_Click(object sender, EventArgs e)
-        {
-            for (int i = 0; i < pnlForm.Controls.Count; i++)
-            {
-                pnlForm.Controls[i].Visible = false;
-            }
-            pnlForm.Controls["UIForm"].Visible = true;
-        }
+
 
         private void btnImageLoad_Click(object sender, EventArgs e)
         {
@@ -118,10 +100,28 @@ namespace Hong_Solution
                 FormTest.ToolsHong.LoadPictureboxImage(FormUI.pictureBox1,ofd.FileName);
             }
             FormUI.pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
+            FormOpenCV.Refresh();
             //FormUI.pictureBox1.Image = FormTest.a.Image.Image;
             //FormUI.pictureBox1.Image.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
             //ImageArray=stream.ToArray();
             //for(int i = 0; i < ImageArray; i++)
+        }
+
+        private void ShowForm(object sender, EventArgs e)
+        {
+            Button btn=(Button)sender;
+            for (int i = 0; i < pnlForm.Controls.Count; i++)
+            {
+                pnlForm.Controls[i].Visible = false;
+                if (pnlForm.Controls[i].Name.Contains(btn.Text))
+                {
+                    pnlForm.Controls[i].Visible = true;
+                }
+            }
+        }
+        private void btnOpenCV_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

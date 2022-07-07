@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Hong_Solution.Tools
+namespace Hong_Solution
 {
     public class HongTools
     {
@@ -114,7 +114,14 @@ namespace Hong_Solution.Tools
             }
         }
         #endregion
+        #region Math
 
+        public T Smaller<T>(dynamic a, dynamic b)
+        {
+            return a > b ? b : a;
+        }
+
+        #endregion
 
         #region Misc
         //public void EventHandler()

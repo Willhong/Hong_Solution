@@ -30,9 +30,10 @@
         {
             this.pnlForm = new System.Windows.Forms.Panel();
             this.btnTestForm = new System.Windows.Forms.Button();
-            this.btnTmpForm = new System.Windows.Forms.Button();
+            this.btnVisionProForm = new System.Windows.Forms.Button();
             this.btnUIForm = new System.Windows.Forms.Button();
             this.btnImageLoad = new System.Windows.Forms.Button();
+            this.btnOpenCV = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // pnlForm
@@ -50,27 +51,27 @@
             this.btnTestForm.TabIndex = 1;
             this.btnTestForm.Text = "TestForm";
             this.btnTestForm.UseVisualStyleBackColor = true;
-            this.btnTestForm.Click += new System.EventHandler(this.btnTestForm_Click);
+            this.btnTestForm.Click += new System.EventHandler(this.ShowForm);
             // 
-            // btnTmpForm
+            // btnVisionProForm
             // 
-            this.btnTmpForm.Location = new System.Drawing.Point(507, 99);
-            this.btnTmpForm.Name = "btnTmpForm";
-            this.btnTmpForm.Size = new System.Drawing.Size(281, 81);
-            this.btnTmpForm.TabIndex = 1;
-            this.btnTmpForm.Text = "VisionPro";
-            this.btnTmpForm.UseVisualStyleBackColor = true;
-            this.btnTmpForm.Click += new System.EventHandler(this.btnTmpForm_Click);
+            this.btnVisionProForm.Location = new System.Drawing.Point(507, 99);
+            this.btnVisionProForm.Name = "btnVisionProForm";
+            this.btnVisionProForm.Size = new System.Drawing.Size(281, 81);
+            this.btnVisionProForm.TabIndex = 1;
+            this.btnVisionProForm.Text = "VisionPro";
+            this.btnVisionProForm.UseVisualStyleBackColor = true;
+            this.btnVisionProForm.Click += new System.EventHandler(this.ShowForm);
             // 
             // btnUIForm
             // 
-            this.btnUIForm.Location = new System.Drawing.Point(507, 186);
+            this.btnUIForm.Location = new System.Drawing.Point(507, 273);
             this.btnUIForm.Name = "btnUIForm";
             this.btnUIForm.Size = new System.Drawing.Size(281, 81);
             this.btnUIForm.TabIndex = 1;
             this.btnUIForm.Text = "UI";
             this.btnUIForm.UseVisualStyleBackColor = true;
-            this.btnUIForm.Click += new System.EventHandler(this.btnUIForm_Click);
+            this.btnUIForm.Click += new System.EventHandler(this.ShowForm);
             // 
             // btnImageLoad
             // 
@@ -82,14 +83,25 @@
             this.btnImageLoad.UseVisualStyleBackColor = true;
             this.btnImageLoad.Click += new System.EventHandler(this.btnImageLoad_Click);
             // 
+            // btnOpenCV
+            // 
+            this.btnOpenCV.Location = new System.Drawing.Point(507, 186);
+            this.btnOpenCV.Name = "btnOpenCV";
+            this.btnOpenCV.Size = new System.Drawing.Size(281, 81);
+            this.btnOpenCV.TabIndex = 1;
+            this.btnOpenCV.Text = "OpenCV";
+            this.btnOpenCV.UseVisualStyleBackColor = true;
+            this.btnOpenCV.Click += new System.EventHandler(this.ShowForm);
+            // 
             // HongMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1904, 1041);
             this.Controls.Add(this.btnImageLoad);
+            this.Controls.Add(this.btnOpenCV);
             this.Controls.Add(this.btnUIForm);
-            this.Controls.Add(this.btnTmpForm);
+            this.Controls.Add(this.btnVisionProForm);
             this.Controls.Add(this.btnTestForm);
             this.Controls.Add(this.pnlForm);
             this.Name = "HongMain";
@@ -103,9 +115,10 @@
 
         private System.Windows.Forms.Panel pnlForm;
         private System.Windows.Forms.Button btnTestForm;
-        private System.Windows.Forms.Button btnTmpForm;
+        private System.Windows.Forms.Button btnVisionProForm;
         private System.Windows.Forms.Button btnUIForm;
         private System.Windows.Forms.Button btnImageLoad;
+        private System.Windows.Forms.Button btnOpenCV;
     }
 }
 
