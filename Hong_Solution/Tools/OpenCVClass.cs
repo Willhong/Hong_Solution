@@ -28,6 +28,10 @@ namespace Hong_Solution
         {
             return BitmapConverter.ToMat(img);
         }
+        public Bitmap ToBitmap(Mat img)
+        {
+            return BitmapConverter.ToBitmap(img);
+        }
 
         public struct ImageMode
         {

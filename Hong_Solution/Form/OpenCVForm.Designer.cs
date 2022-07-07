@@ -47,6 +47,7 @@
             this.tbBlobThreshold = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.btnReverse = new System.Windows.Forms.Button();
+            this.btnResult = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -222,6 +223,16 @@
             this.btnReverse.UseVisualStyleBackColor = true;
             this.btnReverse.Click += new System.EventHandler(this.ReverseMag);
             // 
+            // btnResult
+            // 
+            this.btnResult.Location = new System.Drawing.Point(755, 66);
+            this.btnResult.Name = "btnResult";
+            this.btnResult.Size = new System.Drawing.Size(183, 70);
+            this.btnResult.TabIndex = 1;
+            this.btnResult.Text = "결과";
+            this.btnResult.UseVisualStyleBackColor = true;
+            this.btnResult.Click += new System.EventHandler(this.btnResult_Click);
+            // 
             // OpenCVForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -243,6 +254,7 @@
             this.Controls.Add(this.tbPixel);
             this.Controls.Add(this.tbCoorY);
             this.Controls.Add(this.tbCoorX);
+            this.Controls.Add(this.btnResult);
             this.Controls.Add(this.btnBlob);
             this.Controls.Add(this.btnBinarize);
             this.Controls.Add(this.btnRoi);
@@ -277,5 +289,6 @@
         private System.Windows.Forms.TextBox tbBlobThreshold;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnReverse;
+        private System.Windows.Forms.Button btnResult;
     }
 }

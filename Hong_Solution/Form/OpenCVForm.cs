@@ -21,10 +21,11 @@ namespace Hong_Solution
         public bool bSetRoi =false;
         public bool bMag = true;
         public Bitmap bmpOriginImg = null;
-        public Mat matOriginImg = null;
         public Bitmap RectImage = null;
+        public Mat matOriginImg = null;
         public Mat RoiImage=null;
         public Mat BinaryImg= null;
+        public Mat ResultImg= null;
         public Point pStartPoint_Region;
 
         public Size sizePicturebox;
@@ -42,11 +43,13 @@ namespace Hong_Solution
         {
             try
             {
-                bmpOriginImg = MainHong.FormTest.a.Image.Image;
-                pictureBox1.Image = bmpOriginImg;
-                matOriginImg=ClassOpenCV.ToMat(bmpOriginImg);
-                RoiImage = null;
-                pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+                if (MainHong != null) {
+                    bmpOriginImg = MainHong.FormTest.a.Image.Image;
+                    pictureBox1.Image = bmpOriginImg;
+                    matOriginImg = ClassOpenCV.ToMat(bmpOriginImg);
+                    RoiImage = null;
+                    pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+                    }
             }
             catch (Exception ex)
             {
@@ -172,12 +175,55 @@ namespace Hong_Solution
         {
             try
             {
-                RoiImage = ClassOpenCV.FindBlob(BinaryImg, int.Parse(tbBinarizeThreshold.Text));
+                ResultImg = ClassOpenCV.FindBlob(BinaryImg, int.Parse(tbBinarizeThreshold.Text));
             }
             catch (Exception ex)
             {
 
             }
         }
+
+        private void btnResult_Click(object sender, EventArgs e)
+        {
+            Form form = new Form();
+            form.Size = new Size(1920, 1080);
+            form.AutoScroll = true;
+            List<Mat> images = new List<Mat>();
+            images.Add(matOriginImg);
+            images.Add(RoiImage);
+            images.Add(BinaryImg);
+            images.Add(ResultImg);
+            AddPicturebox(form, images);
+            new Task(new Action(() => form.ShowDialog())).Start();
+        }
+        private void AddPicturebox(Form form,List<Mat> images)
+        {
+            int index = 0;
+            foreach(Mat img in images)
+            {
+                if (img != null)
+                {
+                    form.Controls.Add(new Button()
+                    {
+                        Text = "Image " + index,
+                        Name = "btn" + index,
+                        Location = new Point(100 * index, 0)
+                    });
+                    form.Controls.Add(new PictureBox()
+                    {
+                        Name = "PictureBox" + index,
+                        Image = ClassOpenCV.ToBitmap(img),
+                        SizeMode = PictureBoxSizeMode.Normal,
+                        Size = new Size(500, 500),
+                        Location = new Point(form.Controls["btn" + index].Location.X + 400 * index, form.Controls["btn" + index].Location.Y + 100),
+                        Visible = false
+                    });
+                    ((Button)form.Controls["btn" + index]).Click += new EventHandler((object sender, EventArgs e) => 
+                    form.Controls["Picturebox" + ((Button)sender).Name.Replace("btn", "")].Visible = form.Controls["Picturebox" + ((Button)sender).Name.Replace("btn", "")].Visible ? false : true);
+                    index++;
+                }
+            }
+        }
+        
     }
 }
