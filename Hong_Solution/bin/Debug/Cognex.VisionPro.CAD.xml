@@ -1,0 +1,692 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        "Cognex.VisionPro.CAD"
+    </assembly>
+    <members>
+        <member name="M:Cognex.VisionPro.CAD.CogCADToRange.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+Serialization constructor for CogCADToRange object.
+</summary>
+            <param name="Info">
+The standard SerializationInfo argument.
+</param>
+            <param name="Ctxt">
+The standard StreamingContext argument.
+</param>
+        </member>
+        <member name="M:Cognex.VisionPro.CAD.CogCADToRange.Execute(System.String,Cognex.VisionPro3D.Cog3DBox)">
+            <summary>
+Opens the CAD file and renders a range image.
+</summary>
+            <param name="fileName">
+The CAD file name. Supported file types are STEP(.STEP) and IGES(.igs) files.
+</param>
+            <param name="region">
+The 3D box region. The portion of the cad-shape that lies within this region is rendered. 
+If the supplied region object is null, the entire cad-shape is rendered. 
+The 3D region is interpreted in Projection3D coordinate space. The SelectedSpaceName3D of the region is ignored.
+</param>
+            <remarks>
+                <para>
+  The rendering process is very CPU intensive; It is recommended that you enable multithreading. 
+  The rendering process consists of the following steps:
+  <list type="bullet"><item> 
+  The operator will open the user specified CAD file and load the cad-shape. 
+  The cad-shape is specified in CAD3D, and the coordinates are in physical units. 
+  The cad-shape is an internal object and it is not accessible to the user through the VisionPro API. 
+  </item><item>
+  The cad-shape is then rotated to the viewing direction specified by Projection3D space.
+  The rotation is done by mapping the cad-shape through a 3D rotation transform. 
+  This Projection3DFromCAD3DTransform can be provided explicitly by the user, 
+  or it can be computed internally from a user-supplied vector(in CAD3D) that specifies the 3D viewing direction.
+  </item><item>
+  The operator will then perform the orthographic projection to identify the highest intersection 
+  points between lines drawn vertically through the center of each pixel in Projection3D and 
+  the cad-shape. The projection is done from positive infinity to negative infinity along the z-axis.
+  Optionally, the user can choose a portion of the cad-shape to render by specifying a 3D box region.
+  The region is always interpreted in Projection3D, and any points outside the 3D box will not be rendered.
+  </item><item>
+  The intersection points are then mapped to 16-bit values using the X, Y, and Z scales that are supplied by the user.
+  </item><item>
+  If no intersection point is found, the pixel is marked as non-visible.
+  </item><item>
+  When mapping a z-value to a 16-bit integer we need to be concerned with overflow.
+  Overflow is handled by clamping the z-value to 65535, if necessary.
+  Underflow cannot occur because the bottom surface of the 3D region box is internally 
+  mapped to a grey level slightly above zero; therefore all points within the box will have a positive z grey-level.
+  </item><item>
+  The operator returns a final result object containing the resulting range image, 
+  a flag to indicate if overflow occurred when rendering, and
+  the number of clamped pixels.
+  </item><item>
+  The 3D coordinate space tree in the rendered range image will have three spaces Sensor3D, Projection3D and CAD3D. 
+  The RootFromSensor3DTransform has a diagonal matrix based off the scaling factors, and the translation holds the offset between Root(@) and Sensor3D.
+  Sensor3DFromCAD3DTransform is a rotation transform and the translation between the Sensor3D and CAD3D origins.
+  Sensor3DFromProjection3D has only translation between Sensor3D and CAD3D origins.
+  </item><item>
+  The 2D coordinate space tree in the rendered range image will have a single space: Sensor2D.
+  The RootFromSensor2DTransform has a the diagonal matrix based off the scaling factors, and the translation holds the offset between Root and Sensor2D.
+  </item><item>
+  Both PixelFromRootTransform3D and PixelFromRootTransform in the range image are set to identity.
+  </item></list></para>
+            </remarks>
+            <returns>
+The object containing the rendered range image. 
+</returns>
+            <exception cref="T:Cognex.VisionPro.Exceptions.CogSecurityViolationException">
+Licensing for this operation cannot be confirmed.  See
+<see cref="z:96cca39e-2aa6-4cb3-aabb-92960c4cfa63">Understanding
+VisionPro Security</see> for more information.
+</exception>
+            <exception cref="T:Cognex.VisionPro.Exceptions.CogTimeoutExpiredException">
+The pattern search took longer than the enabled
+<see cref="P:Cognex.VisionPro.CAD.CogCADToRange.Timeout" />
+value.
+</exception>
+            <exception cref="T:System.ArgumentNullException">
+If the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.FileName" /> is null.
+</exception>
+            <exception cref="T:System.ArgumentException">
+If the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.FileName" /> does not exist.
+</exception>
+            <exception cref="T:System.ArgumentException">
+If the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.Region" /> is degenerate.
+</exception>
+            <exception cref="T:System.ArgumentException">
+If the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.FileName" /> extension is not .step or .igs.
+</exception>
+            <exception cref="T:System.ArgumentNullException">
+If the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.Projection3DFromCAD3DTransform" /> is null 
+and the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.RotationMode" /> is UseRotationTransform.
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="M:Cognex.VisionPro.CAD.CogCADToRange.Execute">
+            <summary>
+Opens the CAD file and renders a range image.
+</summary>
+            <remarks>
+                <para>
+  The rendering process is very CPU intensive; It is recommended that you enable multithreading. 
+  The rendering process consists of the following steps:
+  <list type="bullet"><item> 
+  The operator will open the user specified CAD file and load the cad-shape. 
+  The cad-shape is specified in CAD3D, and the coordinates are in physical units. 
+  The cad-shape is an internal object and it is not accessible to the user through the VisionPro API. 
+  </item><item>
+  The cad-shape is then rotated to the viewing direction specified by Projection3D space.
+  The rotation is done by mapping the cad-shape through a 3D rotation transform. 
+  This Projection3DFromCAD3DTransform can be provided explicitly by the user, 
+  or it can be computed internally from a user-supplied vector(in CAD3D) that specifies the 3D viewing direction.
+  </item><item>
+  The operator will then perform the orthographic projection to identify the highest intersection 
+  points between lines drawn vertically through the center of each pixel in Projection3D and 
+  the cad-shape. The projection is done from positive infinity to negative infinity along the z-axis.
+  Optionally, the user can choose a portion of the cad-shape to render by specifying a 3D box region.
+  The region is always interpreted in Projection3D, and any points outside the 3D box will not be rendered.
+  </item><item>
+  The intersection points are then mapped to 16-bit values using the X, Y, and Z scales that are supplied by the user.
+  </item><item>
+  If no intersection point is found, the pixel is marked as non-visible.
+  </item><item>
+  When mapping a z-value to a 16-bit integer we need to be concerned with overflow.
+  Overflow is handled by clamping the z-value to 65535, if necessary.
+  Underflow cannot occur because the bottom surface of the 3D region box is internally 
+  mapped to a grey level slightly above zero; therefore all points within the box will have a positive z grey-level.
+  </item><item>
+  The operator returns a final result object containing the resulting range image, 
+  a flag to indicate if overflow occurred when rendering, and
+  the number of clamped pixels.
+  </item><item>
+  The 3D coordinate space tree in the rendered range image will have three spaces Sensor3D, Projection3D and CAD3D. 
+  The RootFromSensor3DTransform has a diagonal matrix based off the scaling factors, and the translation holds the offset between Root(@) and Sensor3D.
+  Sensor3DFromCAD3DTransform is a rotation transform and the translation between the Sensor3D and CAD3D origins.
+  Sensor3DFromProjection3D has only translation between Sensor3D and CAD3D origins.
+  </item><item>
+  The 2D coordinate space tree in the rendered range image will have a single space: Sensor2D.
+  The RootFromSensor2DTransform has a the diagonal matrix based off the scaling factors, and the translation holds the offset between Root and Sensor2D.
+  </item><item>
+  Both PixelFromRootTransform3D and PixelFromRootTransform in the range image are set to identity.
+  </item></list></para>
+            </remarks>
+            <returns>
+The object containing the rendered range image. 
+</returns>
+            <exception cref="T:Cognex.VisionPro.Exceptions.CogSecurityViolationException">
+Licensing for this operation cannot be confirmed.  See
+<see cref="z:96cca39e-2aa6-4cb3-aabb-92960c4cfa63">Understanding
+VisionPro Security</see> for more information.
+</exception>
+            <exception cref="T:Cognex.VisionPro.Exceptions.CogTimeoutExpiredException">
+The pattern search took longer than the enabled
+<see cref="P:Cognex.VisionPro.CAD.CogCADToRange.Timeout" />
+value.
+</exception>
+            <exception cref="T:System.ArgumentNullException">
+If the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.FileName" /> is null.
+</exception>
+            <exception cref="T:System.ArgumentException">
+If the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.FileName" /> does not exist.
+</exception>
+            <exception cref="T:System.ArgumentException">
+If the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.FileName" /> extension is not .step or .igs.
+</exception>
+            <exception cref="T:System.ArgumentNullException">
+If the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.Projection3DFromCAD3DTransform" /> is null 
+and the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.RotationMode" /> is UseRotationTransform.
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.CAD.CogCADToRange.RotationMode">
+            <summary>
+Gets or sets the rotation mode. The rotation mode specifies which property to use at runtime: 
+either use the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.ViewingDirection" /> or use the explicit <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.Projection3DFromCAD3DTransform" />.
+</summary>
+            <value>The rotation mode specifies which property to use at runtime. The default value is
+<see cref="F:Cognex.VisionPro.CAD.CogCADRotationModeConstants.UseViewingDirection" />.
+</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flag may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.CAD.CogCADToRange.SfRotationMode" /></item></list></event>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+If an invalid enumeration value was supplied.
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="M:Cognex.VisionPro.CAD.CogCADToRange.SetProjection3DZAxisToPositiveCAD3DXAxis">
+            <summary>
+This method replaces the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.Projection3DFromCAD3DTransform" /> held by this operator.
+Projection3D z-axis will be in the same direction as CAD3D x-axis.
+<para>
+The CAD3D coordinate space in the range image is described as follows: z-axis goes to the right, y-axis goes up, and x-axis goes into the yz-plane away from the viewer.
+</para></summary>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+                <para>Fires when this property changes.</para>
+                <para>The following state flag may be affected:</para>
+                <list type="bullet">
+                    <item>
+                        <see cref="F:Cognex.VisionPro.CAD.CogCADToRange.SfProjection3DFromCAD3DTransform" />
+                    </item>
+                </list>
+            </event>
+        </member>
+        <member name="M:Cognex.VisionPro.CAD.CogCADToRange.SetProjection3DZAxisToNegativeCAD3DXAxis">
+            <summary>
+This method replaces the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.Projection3DFromCAD3DTransform" /> held by this operator.
+Projection3D z-axis will be in the same direction as CAD3D x-axis.
+<para>
+The CAD3D coordinate space in the range image is described as follows: z-axis goes to the left, y-axis goes up, and x-axis comes out of the yz-plane towards the viewer.
+</para></summary>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+                <para>Fires when this property changes.</para>
+                <para>The following state flag may be affected:</para>
+                <list type="bullet">
+                    <item>
+                        <see cref="F:Cognex.VisionPro.CAD.CogCADToRange.SfProjection3DFromCAD3DTransform" />
+                    </item>
+                </list>
+            </event>
+        </member>
+        <member name="M:Cognex.VisionPro.CAD.CogCADToRange.SetProjection3DZAxisToPositiveCAD3DYAxis">
+            <summary>
+This method replaces the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.Projection3DFromCAD3DTransform" /> held by this operator.
+Projection3D z-axis will be in the same direction as CAD3D y-axis.
+<para>
+The CAD3D coordinate space in the range image is described as follows: x-axis goes to the right, z-axis goes up, and y-axis goes into the xz-plane away from the viewer.
+</para></summary>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+                <para>Fires when this property changes.</para>
+                <para>The following state flag may be affected:</para>
+                <list type="bullet">
+                    <item>
+                        <see cref="F:Cognex.VisionPro.CAD.CogCADToRange.SfProjection3DFromCAD3DTransform" />
+                    </item>
+                </list>
+            </event>
+        </member>
+        <member name="M:Cognex.VisionPro.CAD.CogCADToRange.SetProjection3DZAxisToNegativeCAD3DYAxis">
+            <summary>
+This method replaces the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.Projection3DFromCAD3DTransform" /> held by this operator.
+Projection3D z-axis will be in the opposite direction of CAD3D y-axis.
+<para>
+The CAD3D coordinate space in the range image is described as follows: x-axis goes to the right, z-axis goes down, and y-axis comes out of the xz-plane towards the viewer.
+</para></summary>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+                <para>Fires when this property changes.</para>
+                <para>The following state flag may be affected:</para>
+                <list type="bullet">
+                    <item>
+                        <see cref="F:Cognex.VisionPro.CAD.CogCADToRange.SfProjection3DFromCAD3DTransform" />
+                    </item>
+                </list>
+            </event>
+        </member>
+        <member name="M:Cognex.VisionPro.CAD.CogCADToRange.SetProjection3DZAxisToNegativeCAD3DZAxis">
+            <summary>
+This method replaces the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.Projection3DFromCAD3DTransform" /> held by this operator.
+The Projection3D z-axis will be in the opposite direction of CAD3D z-axis.
+<para>
+The CAD3D coordinate space in the range image is described as follows: x-axis goes to the left, y-axis goes up, and z-axis goes into the xy-plane away from the viewer.
+</para></summary>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+                <para>Fires when this property changes.</para>
+                <para>The following state flag may be affected:</para>
+                <list type="bullet">
+                    <item>
+                        <see cref="F:Cognex.VisionPro.CAD.CogCADToRange.SfProjection3DFromCAD3DTransform" />
+                    </item>
+                </list>
+            </event>
+        </member>
+        <member name="M:Cognex.VisionPro.CAD.CogCADToRange.SetProjection3DZAxisToPositiveCAD3DZAxis">
+            <summary>
+This method replaces the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.Projection3DFromCAD3DTransform" /> held by this operator.
+The transform is set to an identity transform, 
+meaning there is no rotation between CAD3D and Projection3D coordinate spaces.
+</summary>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+                <para>Fires when this property changes.</para>
+                <para>The following state flag may be affected:</para>
+                <list type="bullet">
+                    <item>
+                        <see cref="F:Cognex.VisionPro.CAD.CogCADToRange.SfProjection3DFromCAD3DTransform" />
+                    </item>
+                </list>
+            </event>
+        </member>
+        <member name="P:Cognex.VisionPro.CAD.CogCADToRange.TimeoutEnabled">
+            <summary>
+If true, the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.Timeout" /> property limits the execution 
+time. If false then the Timeout property is ignored.
+</summary>
+            <value>
+The TimeoutEnabled value. The default value is false.
+</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+                <para>Fires when this property changes.</para>
+                <para>The following state flag may be affected:</para>
+                <list type="bullet">
+                    <item>
+                        <see cref="F:Cognex.VisionPro.CAD.CogCADToRange.SfTimeoutEnabled" />
+                    </item>
+                </list>
+            </event>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.CAD.CogCADToRange.Timeout">
+            <summary>
+A maximum execution time allowed for the operator to render the range image. 
+This value only applies if <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.TimeoutEnabled" /> is true.
+</summary>
+            <value>
+The Timeout value. The default value is 5000.0 milliseconds.
+</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+                <para>Fires when this property changes.</para>
+                <para>The following state flag may be affected:</para>
+                <list type="bullet">
+                    <item>
+                        <see cref="F:Cognex.VisionPro.CAD.CogCADToRange.SfTimeout" />
+                    </item>
+                </list>
+            </event>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+Thrown if set to a value less than 0.0. 
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.CAD.CogCADToRange.Projection3DFromCAD3DTransform">
+            <summary>
+Gets or sets the 3D Rotation transform. 
+The 3D rotation transform that can be used at runtime to map the shape.
+</summary>
+            <value>The default value is a a default constructed Cog3DTransformRotation object.
+</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flags may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.CAD.CogCADToRange.SfProjection3DFromCAD3DTransform" /></item></list></event>
+            <remarks>
+This transform maps points to Projection3D from CAD3D.
+This property is only used if <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.RotationMode" /> is set to
+<see cref="F:Cognex.VisionPro.CAD.CogCADRotationModeConstants.UseRotationTransform" /></remarks>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.CAD.CogCADToRange.Region">
+            <summary>
+Gets or sets the 3D box region. 
+</summary>
+            <value>The 3D box region.  Default value is a null.
+</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flags may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.CAD.CogCADToRange.SfRegion" /></item></list></event>
+            <remarks>
+Only the portion of the cad-shape
+that lies within this region is rendered.  If the
+supplied region object is null, the entire cad-shape is rendered.
+The 3D region is interpreted in Projection3D coordinate space. 
+The SelectedSpaceName3D of the region is ignored.
+</remarks>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.CAD.CogCADToRange.FileName">
+            <summary>
+Gets or sets the CAD file name.
+</summary>
+            <value>
+The CAD file name. The default value is null.
+</value>
+            <remarks>
+Supported file types are STEP(.STEP) and IGES(.igs) files.
+The file existence and the file extension are checked at runtime.
+</remarks>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flags may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.CAD.CogCADToRange.SfFileName" /></item></list></event>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.CAD.CogCADToRange.ViewingDirection">
+            <summary>
+A Cog3DVect3 that holds the 3D viewing direction specified in CAD3D. 
+The vector points towards the viewer.
+It provides another way to define the rotation between CAD3D space and Projection3D space.  
+The full rotation is defined as follows:
+<list type="bullet"><item>
+First, construct a plane that passes through the z-axis of CAD3D and the viewing direction.
+</item><item>
+Next, imagine a rotation axis that passes through the origin of CAD3D, perpendicular to the plane.
+</item><item>
+Projection3D space is obtained by rotating CAD3D space - but not the cad-shape itself - around the 
+rotation axis until the original z-axis of CAD3D is coincident with the viewing direction vector.
+</item></list></summary>
+            <remarks>
+This property is only used if <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.RotationMode" /> is set to 
+<see cref="P:Cognex.VisionPro.CAD.CogCADRotationModeConstants.UseViewingDirection" /></remarks>
+            <value>
+The 3D viewing direction specified in CAD3D. The default value is (0,0,1) meaning along z-axis from 
+positive to negative infinity.
+</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flags may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.CAD.CogCADToRange.SfViewingDirection" /></item></list></event>
+            <exception cref="T:System.ArgumentException">
+If the value.Length is equal to 0.
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.CAD.CogCADToRange.ScaleZ">
+            <summary>
+Gets or sets the z scale.
+</summary>
+            <value>
+The value specifies the physical units per pixel scale factor. The default value is 1.
+</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flags may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.CAD.CogCADToRange.SfScaleZ" /></item></list></event>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+If the value is less than or equal to 0.
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.CAD.CogCADToRange.ScaleY">
+            <summary>
+Gets or sets the y scale.
+</summary>
+            <value>
+The value specifies the physical units per pixel scale factor. The default value is 1.
+</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flags may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.CAD.CogCADToRange.SfScaleY" /></item></list></event>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+If the value is less than or equal to 0.
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.CAD.CogCADToRange.ScaleX">
+            <summary>
+Gets or sets the x scale.
+</summary>
+            <value>
+The value specifies the physical units per pixel scale factor. The default value is 1.
+</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flags may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.CAD.CogCADToRange.SfScaleX" /></item></list></event>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+If the value is less than or equal to 0.
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="M:Cognex.VisionPro.CAD.CogCADToRange.Dispose">
+            <summary>
+Destruct this CogCADToRange.
+</summary>
+        </member>
+        <member name="M:Cognex.VisionPro.CAD.CogCADToRange.#ctor(Cognex.VisionPro.CAD.CogCADToRange)">
+            <summary>
+Constructs a deep copy of the supplied CogCADToRange object.
+</summary>
+            <param name="other">
+The object to copy.  Must not be null.
+</param>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="other" /> is null.
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+                <paramref name="other" /> has been disposed.
+</exception>
+        </member>
+        <member name="M:Cognex.VisionPro.CAD.CogCADToRange.#ctor">
+            <summary>
+Construct a default CogCADToRange object.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.CAD.CogCADToRange.SfNextSf">
+            <summary>
+NextSf state flag.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.CAD.CogCADToRange.SfTimeoutEnabled">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the value returned by TimeoutEnabled may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.CAD.CogCADToRange.SfTimeout">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the value returned by Timeout may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.CAD.CogCADToRange.SfViewingDirection">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the value returned by ViewingDirection may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.CAD.CogCADToRange.SfProjection3DFromCAD3DTransform">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the value returned by Projection3DFromCAD3DTransform may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.CAD.CogCADToRange.SfRotationMode">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the value returned by RotationMode may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.CAD.CogCADToRange.SfFileName">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the value returned by FileName may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.CAD.CogCADToRange.SfRegion">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the value returned by Region may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.CAD.CogCADToRange.SfScaleZ">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the value returned by ScaleZ may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.CAD.CogCADToRange.SfScaleY">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the value returned by ScaleY may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.CAD.CogCADToRange.SfScaleX">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the value returned by ScaleX may have changed.
+</summary>
+        </member>
+        <member name="T:Cognex.VisionPro.CAD.CogCADToRange">
+            <summary>
+Class that holds the properties and methods to open a CAD file and render the cad-shape into a range image.  
+</summary>
+        </member>
+        <member name="M:Cognex.VisionPro.CAD.CogCADToRangeResult.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+Serialization constructor for CogCADToRangeResult object.
+</summary>
+            <param name="info">
+The standard SerializationInfo argument.
+</param>
+            <param name="ctxt">
+The standard StreamingContext argument.
+</param>
+        </member>
+        <member name="P:Cognex.VisionPro.CAD.CogCADToRangeResult.RangeImage">
+            <summary>
+Gets the range image produced from the rendering operation.
+</summary>
+            <value>.
+The rendered range image.
+</value>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.CAD.CogCADToRangeResult.OverflowOccurred">
+            <summary>
+Gets whether an overflow occurred in the rendering operation.
+</summary>
+            <value>.
+The overflow indicator. The value will be true if <see cref="P:Cognex.VisionPro.CAD.CogCADToRangeResult.NumClampedPixels" /> is greater than zero.
+</value>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.CAD.CogCADToRangeResult.NumClampedPixels">
+            <summary>
+Gets the number of clamped pixels from the rendering operation.
+</summary>
+            <value>.
+The number of clamped pixels.
+</value>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+            <remarks>
+During the rendering process, if a pixel value is greater than 65535, it is clamped and set to 65535.
+</remarks>
+        </member>
+        <member name="M:Cognex.VisionPro.CAD.CogCADToRangeResult.#ctor(Cognex.VisionPro.CAD.CogCADToRangeResult)">
+            <summary>
+Constructs a deep copy of the supplied CogCADToRangeResult object.
+</summary>
+            <param name="other">
+The object to copy.  Must not be null.
+</param>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="other" /> is null.
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+                <paramref name="other" /> has been disposed.
+</exception>
+        </member>
+        <member name="T:Cognex.VisionPro.CAD.CogCADToRangeResult">
+            <summary>
+Class that holds the results produced from rendering a cad-shape into a range image. 
+</summary>
+            <remarks>
+An instance of this class is returned by the CogCADToRange <see cref="M:Cognex.VisionPro.CAD.CogCADToRange.Execute" /> method.
+</remarks>
+        </member>
+        <member name="T:Cognex.VisionPro.CAD.CogCADRotationModeConstants">
+            <summary>
+An enumeration to specify which rotation property to use at runtime.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.CAD.CogCADRotationModeConstants.UseRotationTransform">
+            <summary>
+Use the value specified in the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.Projection3DFromCAD3DTransform" /> property at runtime.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.CAD.CogCADRotationModeConstants.UseViewingDirection">
+            <summary>
+Use the value specified in the <see cref="P:Cognex.VisionPro.CAD.CogCADToRange.ViewingDirection" /> property at runtime as the viewing direction.
+</summary>
+        </member>
+    </members>
+</doc>

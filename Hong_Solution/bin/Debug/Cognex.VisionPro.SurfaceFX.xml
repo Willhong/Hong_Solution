@@ -1,0 +1,774 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        "Cognex.VisionPro.SurfaceFX"
+    </assembly>
+    <members>
+        <member name="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.OutputImage">
+            <summary>
+Gets the OutputImage from the last run of the tool.
+</summary>
+            <value> The results from the last run of the tool.
+Default value is null.</value>
+            <remarks>
+The returned OutputImage will be null if the last call to
+<see cref="M:Cognex.VisionPro.Implementation.CogToolBase.Run" />
+failed.  
+</remarks>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.RunParams">
+            <summary>
+Gets or sets the parameters to be used when this SurfaceFX tool is run.
+</summary>
+            <value> The parameters to use at runtime.  Default
+value is a default constructed
+<see cref="T:Cognex.VisionPro.SurfaceFX.CogSurfaceFX" />
+object.</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flags may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfRunParams" /></item><item><see cref="F:Cognex.VisionPro.Implementation.CogToolBase.SfCreateCurrentRecord" /></item></list></event>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.Region">
+            <summary>
+Gets or sets the region. The region bounding box specifies the portion of each image to be processed.  
+The output image size is based on the region bounding box size. 
+</summary>
+            <value>The search region.  Default value is null.</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flags may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfRegion" /></item><item><see cref="F:Cognex.VisionPro.Implementation.CogToolBase.SfCreateCurrentRecord" /></item></list></event>
+            <remarks>
+SurfaceFX also does not try to guess which of the newly - aligned pixels the user expects 
+to see in the output image. It requires the user to provide a region 
+– specified in the shared coordinate space – that defines the size, shape, and location 
+of the desired output image. SurfaceFX insists that the pixel - aligned bounding box 
+of this region must fall completely on the pixels of each input image. 
+If the bounding box of the region falls off the edge of any input image, an error will be returned.
+<para>
+To ensure that the region's bounding box is the same size on all images 
+(and is not affected by tiny floating-point round off errors) we do the following:
+<list type="bullet"><item>
+Compute the whole - pixel size of the bounding box on all input images.
+</item><item>
+Determine the smallest width of the bounding boxes, and the smallest height.
+</item><item>
+Create a whole - pixel rectangle using the smallest width and height.
+</item><item>
+Transfer the integer dimensions of this rectangle to the other three input images, 
+using the whole - pixel alignment computed during the alignment phase, as described above.
+</item></list></para><para>
+If the user knows that there is no motion in their application, they need not provide a region at all.
+SurfaceFX will simply assume that the desired region is the full size of the first input image and has 
+a SelectedSpaceName of ".". This will give the desired result for our most common users : 
+users that supply input images with the same size and the same SelectedSpaceName. It will also(correctly) 
+result in a runtime error if there is any fixtured motion between the images.
+</para></remarks>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.InputVisionData">
+            <summary>
+Gets or Sets the input vision data container.
+When a CogSurfaceFXTool is first constructed, the InputVisionData property is 
+pre - populated with a CogVisionDataContainer that has four "null" images.
+As a convenience, the keys that identify these images are pre - defined to be 
+"LitFromRight", "LitFromBottom", etc. If the user hates these keys they can replace 
+the entire CogVisionDataContainer with a new one that has completely different keys.
+<para>
+When a user replaces the InputVisionData property, the CogSurfaceFXTool will immediately 
+verify that the container has four items, with keys that are suitable as names in a 
+coordinate space tree. Each item must be an ICogImage, or null. We only insist that each 
+image is a CogImage8Grey at runtime. Replacing the InputVisionData container fires a Changed 
+event for that property, and also for the individual image properties if they are different.
+</para><para>
+At runtime, the CogSurfaceFX operator will check that the InputVisionData property contains 
+exactly four images of type CogImage8Grey. It will assume that the first image in the container 
+was lit from the right, the second image was lit from below, etc. The key strings that are associated 
+with each image will only be used as a space name in the merged coordinate space tree of the output image, 
+if they are used at all.
+</para></summary>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when the value of this property changes.
+</event>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+            <exception cref="T:System.ArgumentNullException">
+If the value is null.
+</exception>
+            <exception cref="T:System.ArgumentException">
+If the container does not have 4 records.
+</exception>
+            <exception cref="T:System.ArgumentException">
+If any of the 4 keys is an empty space or null.
+</exception>
+            <exception cref="T:Cognex.VisionPro.Exceptions.CogSpaceTreeInvalidNameSyntaxException">
+If any of the 4 keys is not valid coordinate space name.
+</exception>
+            <exception cref="T:System.ArgumentException">
+If any of the non-null values are not an ICogImage.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.LitFromRightInputImage">
+            <summary>
+Gets or sets the Lit from right input image that will be 
+used at run time.
+<para>
+This property sets the value of the first record in the InputVisionData container.
+</para></summary>
+            <value>The lit from right input image.  Default value is null.</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flags may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfLitFromRightInputImage" /></item><item><see cref="F:Cognex.VisionPro.Implementation.CogToolBase.SfCreateCurrentRecord" /></item></list></event>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.LitFromLeftInputImage">
+            <summary>
+Gets or sets the Lit from left input image that will be 
+used at run time.
+<para>
+This property sets the value of the third record in the InputVisionData container.
+</para></summary>
+            <value>The lit from left input image.  Default value is null.</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flags may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfLitFromLeftInputImage" /></item><item><see cref="F:Cognex.VisionPro.Implementation.CogToolBase.SfCreateCurrentRecord" /></item></list></event>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.LitFromBottomInputImage">
+            <summary>
+Gets or sets the Lit from bottom input image that will be 
+used at run time.
+<para>
+This property sets the value of the second record in the InputVisionData container.
+</para></summary>
+            <value>The lit from bottom input image.  Default value is null.</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flags may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfLitFromBottomInputImage" /></item><item><see cref="F:Cognex.VisionPro.Implementation.CogToolBase.SfCreateCurrentRecord" /></item></list></event>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.LitFromTopInputImage">
+            <summary>
+Gets or sets the Lit from top input image that will be 
+used at run time.
+<para>
+This property sets the value of the fourth record in the InputVisionData container.
+</para></summary>
+            <value>The lit from top input image.  Default value is null.</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flags may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfLitFromTopInputImage" /></item><item><see cref="F:Cognex.VisionPro.Implementation.CogToolBase.SfCreateCurrentRecord" /></item></list></event>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.LastRunRecordDiagEnable">
+            <summary>
+Enable the creation of graphical tool records by bitwise ORing the
+desired values from
+<see cref="T:Cognex.VisionPro.SurfaceFX.CogSurfaceFXLastRunRecordDiagConstants" />.
+</summary>
+            <value>A bitwise combination of the values from
+<see cref="T:Cognex.VisionPro.SurfaceFX.CogSurfaceFXLastRunRecordDiagConstants" />.
+Default value is InputImageByReference + Region.</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flag may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfLastRunRecordDiagEnable" /></item></list></event>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.LastRunRecordEnable">
+            <summary>
+Enable the creation of graphical tool records by bitwise ORing the
+desired values from
+<see cref="T:Cognex.VisionPro.SurfaceFX.CogSurfaceFXLastRunRecordConstants" />.
+</summary>
+            <value>A bitwise combination of the values from
+<see cref="T:Cognex.VisionPro.SurfaceFX.CogSurfaceFXLastRunRecordConstants" />.
+Default value is OutputImage. </value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flags may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfLastRunRecordEnable" /></item><item><see cref="F:Cognex.VisionPro.Implementation.CogToolBase.SfCreateLastRunRecord" /></item></list></event>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.CurrentRecordEnable">
+            <summary>
+Enable the creation of graphical tool records by bitwise ORing the
+desired values from
+<see cref="T:Cognex.VisionPro.SurfaceFX.CogSurfaceFXCurrentRecordConstants" />.
+</summary>
+            <value>A bitwise combination of the values from
+<see cref="T:Cognex.VisionPro.SurfaceFX.CogSurfaceFXCurrentRecordConstants" />.
+Default value is InputImage + Region </value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flags may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfCurrentRecordEnable" /></item><item><see cref="F:Cognex.VisionPro.Implementation.CogToolBase.SfCreateCurrentRecord" /></item></list></event>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="M:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+Serializer for CogSurfaceFXTool object.
+</summary>
+            <param name="Info">
+The standard SerializationInfo argument.
+</param>
+            <param name="Ctxt">
+The standard StreamingContext argument.
+</param>
+        </member>
+        <member name="M:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+Serialization constructor for CogSurfaceFXTool object.
+</summary>
+            <param name="info">
+The standard SerializationInfo argument.
+</param>
+            <param name="ctxt">
+The standard StreamingContext argument.
+</param>
+        </member>
+        <member name="M:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.Clone">
+            <summary>
+Returns a deep copy of this CogSurfaceFXTool object.
+</summary>
+            <returns>
+A new CogSurfaceFXTool instance that is a deep copy.
+</returns>
+        </member>
+        <member name="M:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.Dispose">
+            <summary>
+Releases all resources used by this CogSurfaceFXTool object.
+</summary>
+        </member>
+        <member name="M:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.#ctor(Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool)">
+            <summary>
+Constructs a deep copy of the supplied CogSurfaceFXTool object.
+</summary>
+            <param name="other">
+The object to copy.  Must not be null.
+</param>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="other" /> is null.
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+                <paramref name="other" /> has been disposed.
+</exception>
+        </member>
+        <member name="M:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.#ctor">
+            <summary>
+Constructs a default CogSurfaceFXTool object.  This new tool 
+contains a default set of run params.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfLitFromTopInputImage">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the LitFromTopInputImage may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfLitFromBottomInputImage">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the LitFromBottomInputImage may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfLitFromLeftInputImage">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the LitFromLeftInputImage may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfLitFromRightInputImage">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the LitFromRightInputImage may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfOutputImage">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the output image may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfRegion">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the value returned by Region may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfInputVisionData">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the value returned by InputVisionData may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfRunParams">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the value returned by RunParams may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfCurrentRecordEnable">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the value returned by CurrentRecordEnable may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfLastRunRecordDiagEnable">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the value returned by LastRunRecordDiagEnable may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.SfLastRunRecordEnable">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time
+the value returned by LastRunRecordEnable may have changed.
+</summary>
+        </member>
+        <member name="T:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool">
+            <summary>
+Class that represents the top-level SurfaceFX tool.  
+The SurfaceFX tool accepts four two-dimensional images as input. 
+Each image must show the same physical scene.
+But each image must be acquired under a different illumination condition :
+<list type="bullet"><item>
+The first image must be lit from the right.
+</item><item>
+The second image must be lit from the bottom.
+</item><item>
+The third image must be lit from the left.
+</item><item>
+The fourth image must be lit from the top.
+</item></list>
+The SurfaceFX tool uses these images to estimate the three - dimensional shape of the physical scene.
+The generated 3D surface cannot be "seen" by our customers – it is entirely internal – but, 
+it is the(only) data used to generate the tool's final output image. 
+The output image  is a single 8-bit grey-level image which shows the flat portions of the 3D surface as 
+uniform grey and highlights the highly-curved sections of the surface as either white 
+(if the surface curvature is concave-down) or black (if the surface curvature is concave-up).
+This image can be used to visualize 3D surface features such as bumps, dents, scratches, engraving and etchings.  T
+this image can also be passed to other VisionPro tools, like Blob, to analyze the location and size of these highly-curved 3D surface features.
+</summary>
+            <remarks>
+Limitations:
+<list type="bullet"><item>
+Requires four images whose pixels are the same size (relative to the physical scene), but are acquired using different illumination.
+</item><item>
+Requires customers to align the input images, using fixturing, if there is any motion between them.
+</item><item>
+Does not account for rotation between the images.
+</item><item>
+Does not account for sub-pixel shifts between images.
+</item><item>
+Will produce poor output – and not an error – if the motion between the input images is excessive, or contains rotation.
+</item></list></remarks>
+        </member>
+        <member name="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.MergeAllSelectedSpaceName">
+            <summary>
+Gets or sets the SelectedSpaceName of the outputImage, when SpaceTreeMode is MergeAll.
+</summary>
+            <remarks />
+            <value>
+The default is "@".
+</value>
+            <event cref="T:Cognex.VisionPro.ICogChangedEvent">
+                <para>Fires when this property changes.</para>
+                <para>The following state flag may be affected:</para>
+                <list type="bullet">
+                    <item>SfMergeAllSelectedSpaceName</item>
+                </list>
+            </event>
+            <exception cref="T:Cognex.VisionPro.Exceptions.CogSpaceTreeInvalidNameSyntaxException">
+if the value is not a valid syntax for a coordinate space tree.
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.SpaceTreeMode">
+            <summary>
+Gets or sets the SpaceTreeMode. Allows the user
+to choose which coordinate space tree to copy to
+the output image, or choose to merge the coordinate spaces from the all of the input images.
+</summary>
+            <remarks>
+There are 2 different way of creating the coordinate space tree in the output image :
+<list type="bullet"><item>
+You can choose to Copy the coordinate space tree from one of the input
+images. In this case, the tree of the chosen input image is copied by
+reference to output image.The input and output images both refer
+to that one tree.The coordinate spaces from all the other input
+images do not appear in the output.
+</item><item>
+You can choose to Merge together the coordinate space trees from all of
+the input images.This choice preserves all of the input coordinate
+spaces, but results in a more complicated tree structure.The tree of
+the output image has four main branches -- one for each of the
+input images.The first coordinate space on each branch is named
+using the corresponding key string from the input CogVisionDataContainer.
+The second coordinate space on each branch is a reference to the
+entire coordinate space tree of the matching input image. You can use
+this enlarged tree to map between any of the input coordinate spaces.
+</item></list></remarks>
+            <value> The default value is CopyLitFromRight, the first image in the
+vision data container.
+</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flag may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.SfSpaceTreeMode" /></item></list></event>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+The supplied value is none of the specified enumeration values.
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.Contrast">
+            <summary>
+Gets or sets the contrast. The contrast factor for the output image.
+</summary>
+            <value> The default value is 10.</value>
+            <remarks>
+Contrast specifies the range before clipping occurs when mapping 
+the raw surface irregularity values into the output image. 
+Increasing Contrast scales up the intensity difference between pixels in the output image.
+</remarks>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flag may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.SfContrast" /></item></list></event>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+The supplied value is less than zero or greater than 100.
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.Brightness">
+            <summary>
+Gets or sets the brightness percentage. The brightness percentage for flat areas of the output image.
+For CogImag8Grey
+100% is equal to 255.
+</summary>
+            <value> The default value is 50 percent.</value>
+            <remarks>
+the brightness controls the grey - level that represents flat surfaces. 
+It is a percentage. The default value of 50 % tells SurfaceFX to generate 
+flat surfaces with a grey - level that is half - way between the minimum 
+possible grey - level(i.e.zero) and the maximum possible 
+grey - level(i.e. 255 for an 8 - bit image).
+</remarks>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flag may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.SfBrightness" /></item></list></event>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+The supplied value is less than zero or greater than 100. 
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.Smoothness">
+            <summary>
+Gets or sets the smoothness. 
+</summary>
+            <remarks>
+                <para>
+Estimating the curvature of a 3D surface is an inherently noisy task. 
+Small variations in the grey levels of the input images are "magnified" so that 
+they appear as significant differences in curvature. To counteract this effect, 
+SurfaceFX allows the user to smooth the curvature estimates across the image
+before applying the Brightness and Contrast values. Small amounts of smoothing 
+result in output images that have less noise, while still retaining the undistorted features that are desired.
+</para>
+                <para>
+The Smoothness parameter specifies the standard deviation (in pixels) of a Gaussian 
+smoothing filter that is applied to the curvature estimates just before they are converted to grey levels.
+</para>
+                <para>
+This value behaves as if the user is changing focus:
+larger defects becomes more prominent - as the value increases, and 
+smaller defects becomes more prominent - as the value decreases.
+</para>
+            </remarks>
+            <value> The default value is 1 pixel.</value>
+            <event cref="E:Cognex.VisionPro.ICogChangedEvent.Changed">
+Fires when this property changes.
+The following state flag may be affected:
+<list type="bullet"><item><see cref="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.SfSmoothness" /></item></list></event>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+The supplied value is less than zero or greater than 10.  
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="M:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+Serialization constructor for CogSurfaceFX object.
+</summary>
+            <param name="info">
+The standard SerializationInfo argument.
+</param>
+            <param name="ctxt">
+The standard StreamingContext argument.
+</param>
+        </member>
+        <member name="M:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.Execute(Cognex.VisionPro.CogVisionDataContainer,Cognex.VisionPro.ICogRegion)">
+            <summary>
+Generate the output image using the input images held by the 
+<see cref="P:Cognex.VisionPro.SurfaceFX.CogSurfaceFXTool.InputVisionData" />, 
+the properties of this class
+and the given <paramref name="region" />.
+</summary>
+            <returns>
+The output image, showing the 3D surface curvature. The size of the output image is the same as the pixel-aligned bounding box of the
+region.
+</returns>
+            <param name="inputVisionData">
+The vision data container that the following:
+<list type="bullet"><item>
+4 input images. Each image is <see cref="T:Cognex.VisionPro.CogImage8Grey" /> value.
+</item><item>
+a unique key with each image value.
+</item></list></param>
+            <param name="region">
+An optional region of interest.  If you do not specify a region,
+the entire image is processed.
+</param>
+            <exception cref="T:Cognex.VisionPro.Exceptions.CogSecurityViolationException">
+Licensing for this operation cannot be confirmed.  See
+<see cref="z:96cca39e-2aa6-4cb3-aabb-92960c4cfa63">Understanding
+VisionPro Security</see> for more information.
+</exception>
+            <exception cref="T:Cognex.VisionPro.Exceptions.CogImageNoPixelsException">
+                <paramref name="inputVisionData" /> contained images that have no allocated pixels.
+</exception>
+            <exception cref="T:Cognex.VisionPro.Exceptions.CogImageBadTypeException">
+                <paramref name="inputVisionData" /> contains images that are not
+<see cref="T:Cognex.VisionPro.CogImage8Grey" />.
+</exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="region" />
+falls completely outside of the <paramref name="inputVisionData" /> contained images.
+Or has an invalid 
+<see cref="P:Cognex.VisionPro.ICogShape.SelectedSpaceName" />.
+</exception>
+            <exception cref="T:System.ArgumentNullException">
+If the inputVisionData is null.
+</exception>
+            <exception cref="T:System.ArgumentException">
+If the inputVisionData does not have the appropriate number of records.
+</exception>
+            <exception cref="T:Cognex.VisionPro.Exceptions.CogOperatorNoInputImageException">
+If any of the values in the InputVisionData is null.
+</exception>
+            <exception cref="T:Cognex.VisionPro.Exceptions.CogSpaceTreeInvalidNameSyntaxException">
+If any of the keys in the inputVisionData is not valid coordinate space name.
+</exception>
+            <exception cref="T:System.ArgumentException">
+If any of the non-null values are not an ICogImage.
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+If the object has been disposed.
+</exception>
+        </member>
+        <member name="M:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.Dispose">
+            <summary>
+Releases all resources used by this CogSurfaceFX object.
+</summary>
+        </member>
+        <member name="M:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.#ctor(Cognex.VisionPro.SurfaceFX.CogSurfaceFX)">
+            <summary>
+Constructs a deep copy of the supplied CogSurfaceFX object.
+</summary>
+            <param name="other">
+The object to copy.  Must not be null.
+</param>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="other" /> is null.
+</exception>
+            <exception cref="T:System.ObjectDisposedException">
+                <paramref name="other" /> has been disposed.
+</exception>
+        </member>
+        <member name="M:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.#ctor">
+            <summary>
+Constructs a default CogSurfaceFX object.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.SfMergeAllSelectedSpaceName">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time the
+value returned by MergeAllSelectedSpaceName may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.SfSpaceTreeMode">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time the
+value returned by SpaceTreeMode may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.SfContrast">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time the
+value returned by Contrast may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.SfBrightness">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time the
+value returned by Brightness may have changed.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFX.SfSmoothness">
+            <summary>
+This bit will be set in the EventArgs of a Changed event every time the
+value returned by Smoothness may have changed.
+</summary>
+        </member>
+        <member name="T:Cognex.VisionPro.SurfaceFX.CogSurfaceFX">
+            <summary>
+Class that holds the SurfaceFX run parameters. These parameters 
+are used by the Execute() method and control how SurfaceFX 
+algorithm will generate the output image
+that shows the surface curvature.
+</summary>
+        </member>
+        <member name="T:Cognex.VisionPro.SurfaceFX.CogSurfaceFXSpaceTreeModeConstants">
+            <summary>
+Enumeration to select how to construct the space tree of the 
+output image.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXSpaceTreeModeConstants.MergeAll">
+            <summary>
+Merge all trees.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXSpaceTreeModeConstants.CopyLitFromTop">
+            <summary>
+Copy the coordinate space tree from LitFromTopImage.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXSpaceTreeModeConstants.CopyLitFromLeft">
+            <summary>
+Copy the coordinate space tree from LitFromLeftImage.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXSpaceTreeModeConstants.CopyLitFromBottom">
+            <summary>
+Copy the coordinate space tree from LitFromBottomImage.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXSpaceTreeModeConstants.CopyLitFromRight">
+            <summary>
+Copy the coordinate space tree from LitFromRightImage.
+</summary>
+        </member>
+        <member name="T:Cognex.VisionPro.SurfaceFX.CogSurfaceFXLastRunRecordDiagConstants">
+            <summary>
+Enumeration of diagnostic data that can be provided in the
+Tool's LastRunRecord.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXLastRunRecordDiagConstants.All">
+            <summary>
+Include all of the diagnostic data in the LastRunRecord.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXLastRunRecordDiagConstants.GridAlignedRegion">
+            <summary>
+Include the grid aligned region in the diagnostic data in the LastRunRecord.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXLastRunRecordDiagConstants.InputImages">
+            <summary>
+Include the input images in the diagnostic data in the LastRunRecord.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXLastRunRecordDiagConstants.None">
+            <summary>
+Do not include any diagnostic data in the LastRunRecord.
+</summary>
+        </member>
+        <member name="T:Cognex.VisionPro.SurfaceFX.CogSurfaceFXLastRunRecordConstants">
+            <summary>
+Enumeration of non-diagnostic data that can be provided in
+the Tool's LastRunRecord.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXLastRunRecordConstants.All">
+            <summary>
+Include all of the non-diagnostic data in the LastRunRecord.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXLastRunRecordConstants.OutputImage">
+            <summary>
+Include the output image in the LastRunRecord.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXLastRunRecordConstants.None">
+            <summary>
+Do not include any non-diagnostic data in the LastRunRecord.
+</summary>
+        </member>
+        <member name="T:Cognex.VisionPro.SurfaceFX.CogSurfaceFXCurrentRecordConstants">
+            <summary>
+Enumeration of data that can be provided in the Tool's
+CurrentRecord.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXCurrentRecordConstants.All">
+            <summary>
+Include all possible records in the CurrentRecord.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXCurrentRecordConstants.Region">
+            <summary>
+Include the (interactive) region in the CurrentRecord.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXCurrentRecordConstants.InputImages">
+            <summary>
+Include the input images in the CurrentRecord.
+</summary>
+        </member>
+        <member name="F:Cognex.VisionPro.SurfaceFX.CogSurfaceFXCurrentRecordConstants.None">
+            <summary>
+Do not include any records in the CurrentRecord.
+</summary>
+        </member>
+    </members>
+</doc>
