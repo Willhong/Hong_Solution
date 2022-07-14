@@ -86,18 +86,7 @@ namespace Hong_Solution
 
                     cogAcqFifoTool.Operator.Flush();
 
-                    //if (!FormMain.g_bflgAlignInspectionStart && FormMain.g_bManualGrab)
-                    //{
-                        //string sFolderPath = $"{VisionDef.IMAGE_FOLDER}\\{DateTime.Now.Year}\\{DateTime.Now.Month.ToString("d2")}\\{DateTime.Now.Day.ToString("d2")}\\Grab";
-                        //if (!Directory.Exists(sFolderPath)) Directory.CreateDirectory(sFolderPath); // 폴더 경로 생성
-                        //string sFilePath = $"{sFolderPath}\\{DateTime.Now.Hour.ToString("d2")}{DateTime.Now.Minute.ToString("d2")}{DateTime.Now.Second.ToString("d2")}_Cam{nCamNum+1}.bmp";
-
-
-                        //if (!FormMain.g_bLiveOn)
-                            //FormMain.SaveImageBMP(cogImage8Grey, sFilePath);
-                   // }
-
-                    //FormMain.alignGreyImage[nCamNum] = cogImage8Grey;
+               
                 }
                 catch (Exception e)
                 {
