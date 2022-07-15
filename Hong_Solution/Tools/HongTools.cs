@@ -124,6 +124,13 @@ namespace Hong_Solution
         #endregion
 
         #region Misc
+        public string ASCIIAToZ(int num)
+        {
+            char[] tmp = new char[1];
+            tmp[0] = (char)num;
+            return new string(tmp);
+        }
+            
         //public void EventHandler()
         //{
         //    foreach (Control a in this.Controls)
