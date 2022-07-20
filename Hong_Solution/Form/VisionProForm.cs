@@ -51,7 +51,7 @@ namespace Hong_Solution
 
         public void LoadToolblock()
         {
-            string FilePath = MainHong.FormTest.ToolsHong.OpenFile("vpp");
+            string FilePath = HongTools.OpenFile("vpp");
             object obj = new object[2]
             {
                 FilePath,0

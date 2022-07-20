@@ -77,7 +77,7 @@ namespace Hong_Solution
 
         private void button1_Click(object sender, EventArgs e)
         {
-            FormTest.ToolsHong.ShowDialog("", "");
+            HongTools.ShowDialog("", "");
         }
 
 
@@ -97,7 +97,7 @@ namespace Hong_Solution
                 {
                     FormTest.a.Image.Image = new Bitmap(fileStream);
                 }
-                FormTest.ToolsHong.LoadPictureboxImage(FormUI.pictureBox1,ofd.FileName);
+                HongTools.LoadPictureboxImage(FormUI.pictureBox1,ofd.FileName);
             }
             FormUI.pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
             FormOpenCV.Refresh();

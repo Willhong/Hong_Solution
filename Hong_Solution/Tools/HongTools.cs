@@ -15,7 +15,7 @@ namespace Hong_Solution
     public class HongTools
     {
         #region Custom MessageBox
-        public string ShowDialog(string text, string caption)
+        public static string ShowDialog(string text, string caption)
         {
             Form prompt = new Form()
             {
@@ -58,7 +58,7 @@ namespace Hong_Solution
         #endregion
 
         #region openFileDialog
-        public string OpenFile(string FileType)
+        public static string OpenFile(string FileType)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "*."+ FileType.ToUpper() + "|*."+ FileType.ToLower();
@@ -70,7 +70,7 @@ namespace Hong_Solution
         #endregion
 
         #region Json
-        public void SaveJson(object classname)
+        public static void SaveJson(object classname)
         {
 
             JsonSerializer serializer = new JsonSerializer();
@@ -89,7 +89,7 @@ namespace Hong_Solution
             }
         }
 
-        public T LoadJson<T>(string filename,string section) where T: new()
+        public static T LoadJson<T>(string filename,string section) where T: new()
         {
             return JsonConvert.DeserializeObject<T>((JObject.Parse(File.ReadAllText(filename))[section]).ToString());
 
@@ -102,7 +102,7 @@ namespace Hong_Solution
         #endregion
 
         #region ImageLoad
-        public void LoadPictureboxImage(PictureBox pb,string dir)
+        public static void LoadPictureboxImage(PictureBox pb,string dir)
         {
             if (pb.Image != null)
             {
@@ -114,16 +114,74 @@ namespace Hong_Solution
             }
         }
         #endregion
+
         #region Math
 
-        public T Smaller<T>(dynamic a, dynamic b)
+        public static T Smaller<T>(dynamic a, dynamic b)
         {
             return a > b ? b : a;
         }
 
         #endregion
 
+        #region String
+        public static string CompareOrder(string a, string b)
+        {
+            int compare = string.Compare(a, b);
+            switch (compare)
+            {
+                case 1:
+                    return a;
+                case -1:
+                    return b;
+                default:
+                    return a;
+            }
+        }
+
+
+        #endregion
+
+        #region Array
+        public static T[,] deepcopyArray<T>(T[,] target, int size) // 배열 깊은복사
+        {
+            T[,] tmp = new T[size, size];
+            Array.Copy(target, tmp, target.Length);
+            return tmp;
+        }
+
+        #endregion
+
+        #region List
+
+        public static List<T> deepcopyList<T>(List<T> target)  //리스트 깊은복사
+        {
+            return target.ConvertAll(x => x);
+        }
+
+        public static List<T> OrderList<T>(List<T> origin)   //리스트 정렬
+        {
+            return origin.OrderBy(x => x).ToList();
+        }
+
+        public static List<T> DistinctList<T>(List<T> origin) //리스트 중복 제거
+        {
+            return origin.Select(x => x).Distinct().ToList();
+        }
+        public static void ListAdd<T>(List<T> origin, List<T> ListToAdd)  //리스트 뒤에 리스트 추가
+        {
+            origin.AddRange(ListToAdd);
+        }
+
+
+
+        #endregion
+
         #region Misc
+
+
+
+
         //public void EventHandler()
         //{
         //    foreach (Control a in this.Controls)
@@ -140,6 +198,25 @@ namespace Hong_Solution
         //    TextBox tb = (TextBox)sender;
         //    tb.Text = "1";
         //}
+        public static string RunCMD(string cmd)
+        {
+            System.Diagnostics.ProcessStartInfo proInfo = new System.Diagnostics.ProcessStartInfo();
+            System.Diagnostics.Process pro = new System.Diagnostics.Process();
+            proInfo.FileName = @"cmd";
+            proInfo.CreateNoWindow = true;
+            proInfo.UseShellExecute = false;
+            proInfo.RedirectStandardOutput = true;
+            proInfo.RedirectStandardInput = true;
+            proInfo.RedirectStandardError = true;
+            pro.StartInfo = proInfo;
+            pro.Start();
+            pro.StandardInput.Write(cmd);
+            pro.StandardInput.Close();
+            string resultValue = pro.StandardOutput.ReadToEnd();
+            pro.WaitForExit();
+            pro.Close();
+            return resultValue;
+        }
         #endregion
     }
 }

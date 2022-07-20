@@ -18,7 +18,7 @@ namespace Hong_Solution
         public Arraytest Arraytest { get; set; }
 
         public ImageParam Image { get; set; }
-        
+        public List<ControlInfo> ControlList { get; set; }
     }
     public class ImageParam
     {
@@ -35,7 +35,14 @@ namespace Hong_Solution
     {
         public string ageisnaee { get; set; }
     }
+    public class ControlInfo
+    {
+        public string Name { get; set; }
+        public Point Location { get; set; }
+        public string Type { get; set; }
+        public string Text { get; set; }
 
+    }
     public class Arraytest
     {
         public string[] arraytest { get; set; } 

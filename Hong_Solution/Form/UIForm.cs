@@ -13,34 +13,109 @@ namespace Hong_Solution
     public partial class UIForm : Form
     {
         HongMain MainHong = null;
+        bool isEditMode = false;
         public UIForm(HongMain Main)
         {
             InitializeComponent();
             MainHong = Main;
+            
+                
         }
         int i = 0;
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-            
-            //Button button = new Button
-            //{
-            //    Text = "ButtonTest",
-            //    Name = "Button",
-            //    Location = new Point(100, 100)
-            //};
-            //this.Controls.Add(button);
-            ////this.Controls[i].BringToFront();
-            //this.Controls[i].Click += nothing;
-            
-
-        }
+        
 
         public void nothing(object sender,EventArgs e)
         {
-            MainHong.FormTest.ToolsHong.ShowDialog("adsf", "adfsd");
+            HongTools.ShowDialog("adsf", "adfsd");
 
         }
 
+        public void AddPictureBox(string ControlName,Point _Location, Size _Size)
+        {
+            this.Controls.Add(new PictureBox()
+            {
+                Name = ControlName,
+                SizeMode = PictureBoxSizeMode.Normal,
+                Size = _Size,
+                Location = _Location,
+                Visible = true
+            });
+        }
+        public void AddTextbox(string ControlName, Point _Location, string Text)
+        {
+            this.Controls.Add(new TextBox()
+            {
+                Name = ControlName,
+                Location= _Location,
+                Visible= true
+            });
+        }
+        public void AddButton(string ControlName, Point _Location, string _Text, Size _Size)
+        {
+            foreach(Control control in this.Controls)
+            {
+                if(control.Name == ControlName)
+                {
+                    return;
+                }
+            }
+            this.Controls.Add(new Button()
+            {
+                Name = ControlName,
+                Location = _Location,
+                Text=_Text,
+                Size= _Size,
+                Visible = true,                
+            });
+
+            
+
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            
+            if (comboBox1.SelectedItem.ToString() != "")
+            {
+                if(comboBox1.SelectedItem.ToString() == "TextBox")
+                {
+                    AddTextbox("", new Point(100, 100), "TextBoxTest");
+                }
+                else if (comboBox1.SelectedItem.ToString() == "Button")
+                {
+                    AddButton("", new Point(100, 100), "ButtonTest", new Size(100, 50));
+                }
+            }
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (isEditMode)
+            {
+                isEditMode = false;
+            }
+            else
+            {
+                isEditMode = true;
+            }
+        }
+
+        public void MoveControl(object sender, EventArgs e)
+        {
+
+            if (isEditMode)
+            {
+                ((Control)sender).Location = Cursor.Position;
+            }
+        }
+        public void StopMoveControl(object sender, EventArgs e)
+        {
+
+            if (isEditMode)
+            {
+                isEditMode = false;
+            }
+        }
     }
 
 }

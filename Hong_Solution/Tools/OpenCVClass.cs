@@ -104,7 +104,7 @@ namespace Hong_Solution
             foreach (var item in blobs)
             {
                 CvBlob b = item.Value;
-                if (b.Area > 1)
+                if (b.Area > 100)
                 {
                     //Cv2.Circle(result, b.Contour.StartingPoint, 4, Scalar.Red, 2, LineTypes.AntiAlias);
                     Cv2.PutText(result, b.Area.ToString(), new OpenCvSharp.Point(b.Centroid.X, b.Centroid.Y),

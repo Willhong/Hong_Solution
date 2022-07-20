@@ -13,7 +13,6 @@ namespace Hong_Solution
     public partial class TestForm : Form
     {
         public HongMain MainHong=null;
-        public HongTools ToolsHong = new HongTools();
         public ParamConfig a = new ParamConfig();
         public TestForm(HongMain Main)
         {
@@ -33,16 +32,16 @@ namespace Hong_Solution
         public void LoadJson()
         {
             string Path = HongDef.CONFIG_FOLDER + "\\Config.json";
-            a.NameValue = ToolsHong.LoadJson<NameValue>(Path, "NameValue");
-            a.Age = ToolsHong.LoadJson<Age>(Path, "Age");
-            a.Arraytest = ToolsHong.LoadJson<Arraytest>(Path, "Arraytest");
+            a.NameValue = HongTools.LoadJson<NameValue>(Path, "NameValue");
+            a.Age = HongTools.LoadJson<Age>(Path, "Age");
+            a.Arraytest = HongTools.LoadJson<Arraytest>(Path, "Arraytest");
         }
         public void SaveJson()
         {
             a.NameValue.Name = tbName.Text;
             a.NameValue.Value = tbValue.Text;
             a.Age.ageisnaee = tbAge.Text;
-            ToolsHong.SaveJson(a);
+            HongTools.SaveJson(a);
         }
         private void btnLoad_Click(object sender, EventArgs e)
         {

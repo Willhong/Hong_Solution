@@ -31,6 +31,8 @@ namespace Hong_Solution
         public Size sizePicturebox;
 
         public Rectangle rectRoi;
+
+        Timer RoiTimer = new Timer();
         public OpenCVForm(HongMain main)
         {
             InitializeComponent();
@@ -76,8 +78,8 @@ namespace Hong_Solution
                 Point pRectPoint_Region = new Point();
                 pRectPoint_Region.X = bmpOriginImg.Width * e.X / pictureBox1.Width > bmpOriginImg.Width ? bmpOriginImg.Width - 1 : bmpOriginImg.Width * e.X / pictureBox1.Width;
                 pRectPoint_Region.Y = bmpOriginImg.Height * e.Y / pictureBox1.Height >= bmpOriginImg.Height ? bmpOriginImg.Height - 1 : bmpOriginImg.Height * e.Y / pictureBox1.Height;
-                int rectX = MainHong.FormTest.ToolsHong.Smaller<int>(pStartPoint_Region.X, pRectPoint_Region.X);
-                int rectY = MainHong.FormTest.ToolsHong.Smaller<int>(pStartPoint_Region.Y, pRectPoint_Region.Y);
+                int rectX = HongTools.Smaller<int>(pStartPoint_Region.X, pRectPoint_Region.X);
+                int rectY = HongTools.Smaller<int>(pStartPoint_Region.Y, pRectPoint_Region.Y);
                 int Width = Math.Abs(pStartPoint_Region.X - pRectPoint_Region.X);
                 int Height = Math.Abs(pStartPoint_Region.Y - pRectPoint_Region.Y);
 
@@ -102,12 +104,19 @@ namespace Hong_Solution
 
         private void btnRoi_Click(object sender, EventArgs e)
         {
+                
+            
             if (!bSetRoi)
             {
                 bSetRoi = true;
+                RoiTimer.Interval = 500;
+                RoiTimer.Tick += Tim_Tick;
+                RoiTimer.Start();
             }
             else
             {
+                RoiTimer.Stop();
+                btnRoi.BackColor = SystemColors.ButtonFace;
                 bSetRoi = false;
                 RoiImage = ClassOpenCV.SubMat(ClassOpenCV.ToMat(bmpOriginImg), rectRoi);
 
@@ -115,6 +124,23 @@ namespace Hong_Solution
             }
         }
 
+        private void Tim_Tick(object sender, EventArgs e)
+        {
+            if (btnRoi.BackColor == SystemColors.ButtonFace)
+            {
+                btnRoi.BackColor = Color.Red;
+            }
+            else
+            {
+                btnRoi.BackColor = SystemColors.ButtonFace;
+            }
+            throw new NotImplementedException();
+        }
+
+        public void SetButtonColor()
+        {
+            
+        }
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
             bMouseDown = false;
@@ -139,7 +165,6 @@ namespace Hong_Solution
 
         public void ReverseMag(object sender, EventArgs e)
         {
-            
             foreach(Control cont in this.Controls)
             {
                 if (cont.GetType() == typeof(Button))
