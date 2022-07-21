@@ -158,12 +158,10 @@ namespace Hong_Solution
         {
             return target.ConvertAll(x => x);
         }
-
         public static List<T> OrderList<T>(List<T> origin)   //리스트 정렬
         {
             return origin.OrderBy(x => x).ToList();
         }
-
         public static List<T> DistinctList<T>(List<T> origin) //리스트 중복 제거
         {
             return origin.Select(x => x).Distinct().ToList();
@@ -172,8 +170,23 @@ namespace Hong_Solution
         {
             origin.AddRange(ListToAdd);
         }
+        public static object MatchList<T>(List<T> list1, List<T> list2)
+        {
+            var MatchingList= from lst in list1
+                              from lst2 in list2
+                              select new { A= lst, B= lst2 };
 
+            return MatchingList.ToList();
+        }
+        public static object MatchList<T>(List<T> list1, List<T> list2, List<T> list3)
+        {
+            var MatchingList = from lst in list1
+                               from lst2 in list2
+                               from lst3 in list3
+                               select new { A = lst, B = lst2, C = lst3 };
 
+            return MatchingList.ToList();
+        }
 
         #endregion
 
